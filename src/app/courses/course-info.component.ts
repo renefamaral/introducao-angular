@@ -3,6 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { CourseService } from "./course.service";
 import { Course } from './course';
 
+
 @Component({
     templateUrl: './course-info.component.html'
 })
@@ -16,11 +17,17 @@ export class CourseInfoComponent implements OnInit{
 
     ngOnInit(): void { // vamos carregar a informação do id do nosso curso
 
-        this.course = this.courseService.retrieveById(+this.activatedRoute.snapshot.paramMap.get('id'));
+        this.courseService.retrieveById(+this.activatedRoute.snapshot.paramMap.get('id')).subscribe({ //subscrevendo a requisição http
+            next: course => this.course = course, // retorno do this.httpClient.get<Course>(`${this.coursesUrl}/${id}`)
+            error: err => console.log('Error', err)
+        });
     }
 
     save(): void {
-        this.courseService.save(this.course);
+        this.courseService.save(this.course).subscribe({ // sempre que chamar a requisição via HttpCliente é necessário o subscribe
+            next: course => console.log('Saved with sucess', course),
+            error: err => console.log('Error', err)
+        });
     }
 
 }
