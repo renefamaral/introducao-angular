@@ -28,6 +28,10 @@ export class CourseService {
         }
     }
 
+    deleteById(id: number): Observable<any> { // em typescipt o any espera receber qualquer tipo como retorno
+        return this.httpClient.delete<any>(`${this.coursesUrl}/${id}`);
+    }
+
 }
 
 var COURSES: Course[] = [
